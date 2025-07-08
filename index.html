@@ -1,4 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- full content as in the current canvas, already verified to include fixed mobile touch logic -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag & Drop Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .logo {
+      text-align: center;
+      padding: 20px;
+    }
+    .logo img {
+      max-width: 300px;
+      height: auto;
+    }
+    .main-columns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+    .column {
+      flex: 1;
+      min-width: 300px;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .column h2 {
+      text-align: center;
+    }
+    .site-box, .holiday-sick-box, .unassigned {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .site-employees {
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border: 1px dashed #ccc;
+      padding: 5px;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .site-notes label {
+      font-weight: bold;
+      display: block;
+      margin-top: 5px;
+    }
+    .site-notes div[contenteditable] {
+      border: 1px solid #ccc;
+      padding: 6px;
+      border-radius: 4px;
+      background: #fff;
+      min-height: 40px;
+    }
+    .holiday-sick-box {
+      min-height: 60px;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .employee {
+      padding: 8px;
+      background: #e0e0e0;
+      margin: 3px 0;
+      border-radius: 4px;
+      cursor: grab;
+    }
+    .drag-over {
+      background-color: #d9f2ff;
+      border-color: #4dabf7;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="CS_logo_long.jpg" alt="Cornfield Scaffolding Logo">
+  </div>
+  <div class="main-columns">
+    <!-- Column 1: Employees -->
+    <div class="column">
+      <h2>Employees</h2>
+      <div class="unassigned" data-type="unassigned">
+        <div class="employee" draggable="true">Matty O'donoughhoe</div>
+        <div class="employee" draggable="true">Ashley Coleman</div>
+        <div class="employee" draggable="true">Shane Clarke</div>
+        <div class="employee" draggable="true">Luke Watts</div>
+        <div class="employee" draggable="true">Tyler Didwell</div>
+        <div class="employee" draggable="true">Robert Bone</div>
+        <div class="employee" draggable="true">Tyler Pluck</div>
+        <div class="employee" draggable="true">Tom Piper</div>
+        <div class="employee" draggable="true">Luke Hughes</div>
+        <div class="employee" draggable="true">Benny Ainge</div>
+        <div class="employee" draggable="true">Reece Hendry</div>
+        <div class="employee" draggable="true">Daniel Fisher</div>
+        <div class="employee" draggable="true">Elliot Auld</div>
+        <div class="employee" draggable="true">Ashley Dunthorne</div>
+        <div class="employee" draggable="true">Louis Maynard</div>
+        <div class="employee" draggable="true">Bradley Whymark</div>
+        <div class="employee" draggable="true">Liam Bolt</div>
+        <div class="employee" draggable="true">Ridley Bolt</div>
+        <div class="employee" draggable="true">Steve White</div>
+        <div class="employee" draggable="true">Spencer Lane</div>
+        <div class="employee" draggable="true">John Goosetree</div>
+        <div class="employee" draggable="true">Ashton Mason</div>
+      </div>
+    </div>
+
+    <!-- Column 2: Work Sites A -->
+    <div class="column">
+      <h2>Work Sites</h2>
+      <div class="site-box"><h3>Elmswell (Orbit)</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>Dovecote (Orbit)</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>Ketts Meadow (Persimmon)</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>Cantley Sugar Factory</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+    </div>
+
+    <!-- Column 3: Work Sites B -->
+    <div class="column">
+      <h2>Trucks</h2>
+      <div class="site-box"><h3>PK61 SYC</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>DA11 FYS</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>HN09 HKA</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+      <div class="site-box"><h3>SN65 EPF</h3><div class="site-employees column" data-type="site"></div><div class="site-notes"><label>Notes:</label><div contenteditable="true"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Holiday & Sick below all -->
+  <div class="main-columns">
+    <div class="column">
+      <h2>Holiday / Sick</h2>
+      <div class="holiday-sick-box column" data-type="holiday">
+        <h3>Holiday</h3>
+      </div>
+      <div class="holiday-sick-box column" data-type="sick">
+        <h3>Sick</h3>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let dragged = null;
+
+    document.addEventListener('dragstart', e => {
+      if (e.target.classList.contains('employee')) {
+        dragged = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+      }
+    });
+
+    document.addEventListener('dragover', e => {
+      const col = e.target.closest('.column');
+      if (col) {
+        e.preventDefault();
+        col.classList.add('drag-over');
+      }
+    });
+
+    document.addEventListener('dragleave', e => {
+      const col = e.target.closest('.column');
+      if (col) {
+        col.classList.remove('drag-over');
+      }
+    });
+
+    document.addEventListener('drop', e => {
+      const validDrop = e.target.closest('.site-employees, .unassigned, .holiday-sick-box');
+      if (validDrop && dragged) {
+        validDrop.appendChild(dragged);
+        validDrop.classList.remove('drag-over');
+        dragged = null;
+      }
+    });
+
+    document.querySelectorAll('.employee').forEach(el => {
+      el.addEventListener('touchstart', () => {
+        dragged = el;
+      });
+    });
+
+    document.addEventListener('touchend', (e) => {
+      if (!dragged) return;
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const dropZone = target?.closest('.site-employees, .unassigned, .holiday-sick-box');
+      if (dropZone) {
+        dropZone.appendChild(dragged);
+      }
+      dragged = null;
+    });
+  </script>
+
+  <div style="text-align:center; margin-top: 40px;">
+    <button onclick="copyReadOnlyLink()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Share Read-Only Link</button>
+  </div>
+
+  <script>
+    function copyReadOnlyLink() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied to clipboard. Paste into WhatsApp or any message to share.');
+      });
+    }
+  </script>
+</body>
 </html>
