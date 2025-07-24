@@ -248,16 +248,62 @@
           const target = e.target.closest('.site-employees');
           if (target) {
             target.appendChild(dragged);
+            saveState(); // Save state to localStorage after drop
           }
           dragged = null;
         }
       });
     }
 
+    // Function to capture the screenshot and download
+    function downloadScreenshot() {
+      html2canvas(document.body).then(function(canvas) {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'schedule_screenshot.png';
+        link.click();
+      });
+    }
+
+    // Function to save the state of employees
+    function saveState() {
+      const employeePositions = {};
+      document.querySelectorAll('.site-employees').forEach(site => {
+        const siteName = site.dataset.name;
+        const employeeElements = site.querySelectorAll('.employee');
+        const employeeNames = [];
+        employeeElements.forEach(emp => employeeNames.push(emp.textContent));
+        if (employeeNames.length > 0) {
+          employeePositions[siteName] = employeeNames;
+        }
+      });
+      localStorage.setItem('employeePositions', JSON.stringify(employeePositions));
+    }
+
+    // Function to load the saved state of employees
+    function loadState() {
+      const savedPositions = localStorage.getItem('employeePositions');
+      if (savedPositions) {
+        const employeePositions = JSON.parse(savedPositions);
+        Object.keys(employeePositions).forEach(siteName => {
+          const site = document.querySelector(`.site-employees[data-name="${siteName}"]`);
+          if (site) {
+            employeePositions[siteName].forEach(empName => {
+              const emp = Array.from(document.querySelectorAll('.employee')).find(e => e.textContent === empName);
+              if (emp) {
+                site.appendChild(emp);
+              }
+            });
+          }
+        });
+      }
+    }
+
     // Initialize the draggable elements and dropdown
     window.onload = function() {
       makeEmployeeBoxDraggable();
       enableDragAndDrop();
+      loadState(); // Load saved state on page load
     };
   </script>
 </body>
