@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,6 +122,143 @@
   </style>
 </head>
 <body>
-  <!-- Full HTML structure from canvas included here -->
+  <div class="logo">
+    <img src="CS_logo_long.jpg" alt="Cornfield Scaffolding Logo">
+  </div>
+
+  <div class="employee-toggle">
+    <button onclick="toggleEmployees()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Toggle Employee List</button>
+  </div>
+
+  <div class="employee-dropdown" id="employeeDropdown">
+    <div class="site-box" data-type="unassigned">
+      <h3>Employees</h3>
+      <div class="site-employees" id="employeeList"></div>
+    </div>
+  </div>
+
+  <div class="main-columns">
+  <div class="column">
+    <h2>SITES</h2>
+    <div class="site-box"><h3>Ketts Meadow</h3><div class="site-employees" data-name="Ketts Meadow"></div></div>
+    <div class="site-box"><h3>Dovecote Gardens</h3><div class="site-employees" data-name="Dovecote Gardens"></div></div>
+    <div class="site-box"><h3>Elmwell</h3><div class="site-employees" data-name="Elmwell"></div></div>
+    <div class="site-box"><h3>Cygnet Rise</h3><div class="site-employees" data-name="Cygnet Rise"></div></div>
+  </div>
+  <div class="column">
+    <h2>GANGS</h2>
+    <div class="site-box"><h3>Gang 1</h3><div class="site-employees" data-name="Gang 1"></div></div>
+    <div class="site-box"><h3>Gang 2</h3><div class="site-employees" data-name="Gang 2"></div></div>
+    <div class="site-box"><h3>Gang 3</h3><div class="site-employees" data-name="Gang 3"></div></div>
+  </div>
+  <div class="column">
+    <h2>&nbsp;</h2>
+    <div class="site-box"><h3>Gang 4</h3><div class="site-employees" data-name="Gang 4"></div></div>
+    <div class="site-box"><h3>Gang 5</h3><div class="site-employees" data-name="Gang 5"></div></div>
+  </div>
+</div>
+<div class="bottom-section">
+  <div class="bottom-box">
+    <h3>Holiday</h3>
+    <div class="bottom-row" data-name="Holiday"></div>
+  </div>
+  <div class="bottom-box">
+    <h3>Sick</h3>
+    <div class="bottom-row" data-name="Sick"></div>
+  </div>
+</div>
+<div style="text-align:center; margin-top: 20px;">
+  <button onclick="downloadScreenshot()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Download Schedule Screenshot</button>
+</div>
+
+  <script>
+    const employees = [
+      "Matthew O’donoughoe", "Ashley Coleman", "Shane Clarke", "Luke Watts", "Tyler Didwell", "Robert Bone",
+      "Tyler Pluck", "Tom Piper", "Luke Hughes", "Benny Ainge", "Reece Hendry", "Daniel Fisher",
+      "Elliot Auld", "Ashley Dunthorne", "Louis Maynard", "Bradley Whymark", "Liam Bolt", "Riley Bolt",
+      "Steve White", "Spencer Lane", "Ashton Mason", "James Smith"
+    ];
+
+    let dragged = null;
+
+    function initEmployees() {
+      const container = document.getElementById('employeeList');
+      container.innerHTML = '';
+      employees.forEach(name => {
+        const emp = document.createElement('div');
+        emp.className = 'employee';
+        emp.textContent = name;
+        emp.setAttribute('draggable', true);
+        container.appendChild(emp);
+      });
+    }
+
+    function toggleEmployees() {
+      const dropdown = document.getElementById('employeeDropdown');
+      if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+      } else {
+        dropdown.style.display = 'block';
+        initEmployees(); // Initialize the employee list when the dropdown is shown
+      }
+    }
+
+    function makeEmployeeBoxDraggable() {
+      const box = document.getElementById('employeeDropdown');
+      let isDown = false, offset = [0, 0];
+
+      box.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.employee')) return;
+        isDown = true;
+        offset = [
+          box.offsetLeft - e.clientX,
+          box.offsetTop - e.clientY
+        ];
+        box.style.cursor = 'grabbing';
+      }, true);
+
+      document.addEventListener('mouseup', function() {
+        isDown = false;
+        box.style.cursor = 'move';
+      }, true);
+
+      document.addEventListener('mousemove', function(event) {
+        event.preventDefault();
+        if (isDown) {
+          box.style.left = (event.clientX + offset[0]) + 'px';
+          box.style.top  = (event.clientY + offset[1]) + 'px';
+        }
+      }, true);
+    }
+
+    function enableDragAndDrop() {
+      document.addEventListener('dragstart', e => {
+        if (e.target.classList.contains('employee')) {
+          dragged = e.target;
+        }
+      });
+
+      document.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+
+      document.addEventListener('drop', e => {
+        e.preventDefault();
+        if (dragged) {
+          const target = e.target.closest('.site-employees');
+          if (target) {
+            target.appendChild(dragged);
+          }
+          dragged = null;
+        }
+      });
+    }
+
+    // Initialize the draggable elements and dropdown
+    window.onload = function() {
+      makeEmployeeBoxDraggable();
+      enableDragAndDrop();
+    };
+  </script>
 </body>
 </html>
