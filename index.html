@@ -1,19 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drag & Drop Scheduler</title>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
+    /* --- BRAND COLORS FROM LOGO --- */
+    :root {
+      --primary-color: #60A030;    /* main green */
+      --accent-color: #70B030;     /* slightly lighter */
+      --bg-dark:      #101010;     /* deep backdrop */
+      --text-dark:    #333333;     /* body text */
+      --text-light:   #ffffff;     /* for buttons, headings on dark */
+    }
+
+    /* --- BASE STYLING --- */
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
+      color: var(--text-dark);
       margin: 0;
       padding: 0;
     }
+
+    /* logo banner */
     .logo {
+      background: var(--bg-dark);
       text-align: center;
       padding: 20px;
     }
@@ -21,10 +33,21 @@
       max-width: 300px;
       height: auto;
     }
-    .employee-toggle {
-      text-align: center;
-      margin-bottom: 10px;
+
+    /* unified button style */
+    button {
+      background: var(--primary-color);
+      color: var(--text-light);
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
     }
+    button:hover {
+      background: var(--accent-color);
+    }
+
     .employee-dropdown {
       display: none;
       position: fixed;
@@ -32,7 +55,7 @@
       left: 100px;
       z-index: 9999;
       background: #fff;
-      border: 2px solid #ccc;
+      border: 2px solid var(--primary-color);
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       max-height: 80vh;
@@ -41,6 +64,8 @@
       width: 300px;
       cursor: move;
     }
+
+    /* layout columns */
     .main-columns {
       display: flex;
       flex-wrap: nowrap;
@@ -51,7 +76,7 @@
     .column {
       flex: 1;
       background: #fff;
-      border: 2px solid #ccc;
+      border: 2px solid #ddd;
       border-radius: 8px;
       padding: 10px;
       display: flex;
@@ -59,12 +84,18 @@
       gap: 10px;
       min-width: 300px;
     }
-    .column h2 {
+
+    /* headings in green */
+    .column h2,
+    .bottom-box h3 {
       text-align: center;
       font-size: 24px;
+      color: var(--primary-color);
+      margin: 0 0 10px;
     }
+
     .site-box {
-      border: 1px solid #ddd;
+      border: 1px solid var(--accent-color);
       border-radius: 6px;
       padding: 10px;
       background: #fafafa;
@@ -72,27 +103,43 @@
       flex-direction: column;
       gap: 10px;
     }
+    .site-box h3 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--accent-color);
+      text-align: center;
+    }
+
+    /* drop‑zones */
     .site-employees {
       min-height: 60px;
       display: flex;
       flex-direction: column;
       gap: 5px;
-      border: 1px dashed #ccc;
+      border: 1px dashed var(--primary-color);
       padding: 5px;
       border-radius: 4px;
       background: #fff;
     }
+    .bottom-row {
+      /* override for horizontal wrap */
+      flex-wrap: wrap;
+    }
+
     .employee {
       padding: 8px;
-      background: #e0e0e0;
+      background: var(--accent-color);
+      color: var(--text-light);
       margin: 3px 0;
       border-radius: 4px;
       cursor: grab;
     }
+
     .drag-over {
-      background-color: #d9f2ff;
-      border-color: #4dabf7;
+      background-color: rgba(96,160,48,0.2);
+      border-color: var(--primary-color);
     }
+
     .bottom-section {
       display: flex;
       justify-content: center;
@@ -100,34 +147,21 @@
       margin: 40px 0;
     }
     .bottom-box {
-      border: 2px solid #ccc;
+      border: 2px solid var(--primary-color);
       border-radius: 8px;
       padding: 10px;
       width: 45%;
-    }
-    .bottom-box h3 {
-      text-align: center;
-      font-size: 20px;
-    }
-    .bottom-row {
-      min-height: 60px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      padding: 5px;
-      border: 1px dashed #ccc;
       background: #fff;
-      border-radius: 4px;
     }
   </style>
 </head>
 <body>
   <div class="logo">
-    <img src="CS_logo_long.jpg" alt="Cornfield Scaffolding Logo">
+    <img src="CS_logo_long.jpg" alt="Cornfield Scaffolding Logo" />
   </div>
 
-  <div class="employee-toggle">
-    <button onclick="toggleEmployees()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Toggle Employee List</button>
+  <div class="employee-toggle" style="text-align:center; margin:20px 0;">
+    <button onclick="toggleEmployees()">Toggle Employee List</button>
   </div>
 
   <div class="employee-dropdown" id="employeeDropdown">
@@ -138,47 +172,88 @@
   </div>
 
   <div class="main-columns">
-  <div class="column">
-    <h2>SITES</h2>
-    <div class="site-box"><h3>Ketts Meadow</h3><div class="site-employees" data-name="Ketts Meadow"></div></div>
-    <div class="site-box"><h3>Dovecote Gardens</h3><div class="site-employees" data-name="Dovecote Gardens"></div></div>
-    <div class="site-box"><h3>Elmwell</h3><div class="site-employees" data-name="Elmwell"></div></div>
-    <div class="site-box"><h3>Cygnet Rise</h3><div class="site-employees" data-name="Cygnet Rise"></div></div>
-  </div>
-  <div class="column">
-    <h2>GANGS</h2>
-    <div class="site-box"><h3>Gang 1</h3><div class="site-employees" data-name="Gang 1"></div></div>
-    <div class="site-box"><h3>Gang 2</h3><div class="site-employees" data-name="Gang 2"></div></div>
-    <div class="site-box"><h3>Gang 3</h3><div class="site-employees" data-name="Gang 3"></div></div>
-  </div>
-  <div class="column">
-    <h2>&nbsp;</h2>
-    <div class="site-box"><h3>Gang 4</h3><div class="site-employees" data-name="Gang 4"></div></div>
-    <div class="site-box"><h3>Gang 5</h3><div class="site-employees" data-name="Gang 5"></div></div>
-  </div>
-</div>
-<div class="bottom-section">
-  <div class="bottom-box">
-    <h3>Holiday</h3>
-    <div class="bottom-row" data-name="Holiday"></div>
-  </div>
-  <div class="bottom-box">
-    <h3>Sick</h3>
-    <div class="bottom-row" data-name="Sick"></div>
-  </div>
-</div>
-<div style="text-align:center; margin-top: 20px;">
-  <button onclick="downloadScreenshot()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Download Schedule Screenshot</button>
-</div>
+    <div class="column">
+      <h2>SITES</h2>
+      <div class="site-box">
+        <h3>Ketts Meadow</h3>
+        <div class="site-employees" data-name="Ketts Meadow"></div>
+      </div>
+      <div class="site-box">
+        <h3>Dovecote Gardens</h3>
+        <div class="site-employees" data-name="Dovecote Gardens"></div>
+      </div>
+      <div class="site-box">
+        <h3>Elmwell</h3>
+        <div class="site-employees" data-name="Elmwell"></div>
+      </div>
+      <div class="site-box">
+        <h3>Cygnet Rise</h3>
+        <div class="site-employees" data-name="Cygnet Rise"></div>
+      </div>
+      <!-- NEW SITE ADDED -->
+      <div class="site-box">
+        <h3>Cantley Sugar Factory</h3>
+        <div class="site-employees" data-name="Cantley Sugar Factory"></div>
+      </div>
+    </div>
 
+    <div class="column">
+      <h2>GANGS</h2>
+      <div class="site-box">
+        <h3>Gang 1</h3>
+        <div class="site-employees" data-name="Gang 1"></div>
+      </div>
+      <div class="site-box">
+        <h3>Gang 2</h3>
+        <div class="site-employees" data-name="Gang 2"></div>
+      </div>
+      <div class="site-box">
+        <h3>Gang 3</h3>
+        <div class="site-employees" data-name="Gang 3"></div>
+      </div>
+    </div>
+
+    <div class="column">
+      <h2>&nbsp;</h2>
+      <div class="site-box">
+        <h3>Gang 4</h3>
+        <div class="site-employees" data-name="Gang 4"></div>
+      </div>
+      <div class="site-box">
+        <h3>Gang 5</h3>
+        <div class="site-employees" data-name="Gang 5"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <div class="bottom-box">
+      <h3>Holiday</h3>
+      <div class="bottom-row site-employees" data-name="Holiday"></div>
+    </div>
+    <div class="bottom-box">
+      <h3>Sick</h3>
+      <div class="bottom-row site-employees" data-name="Sick"></div>
+    </div>
+  </div>
+
+  <!-- Updated Screenshot Button -->
+  <div style="text-align:center; margin-top: 20px;">
+    <button id="downloadBtn">Screenshot page</button>
+  </div>
+
+  <!-- Load html2canvas then wire‑up our click handler -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
+    // Employee data and drag/drop logic
     const employees = [
-      "Matthew O’donoughoe", "Ashley Coleman", "Shane Clarke", "Luke Watts", "Tyler Didwell", "Robert Bone",
-      "Tyler Pluck", "Tom Piper", "Luke Hughes", "Benny Ainge", "Reece Hendry", "Daniel Fisher",
-      "Elliot Auld", "Ashley Dunthorne", "Louis Maynard", "Bradley Whymark", "Liam Bolt", "Riley Bolt",
-      "Steve White", "Spencer Lane", "Ashton Mason", "James Smith"
+      "Matthew O’donoughoe","Ashley Coleman","Shane Clarke","Luke Watts",
+      "Tyler Didwell","Robert Bone","Tyler Pluck","Tom Piper",
+      "Luke Hughes","Benny Ainge","Reece Hendry","Daniel Fisher",
+      "Elliot Auld","Ashley Dunthorne","Louis Maynard","Bradley Whymark",
+      "Liam Bolt","Riley Bolt","Steve White","Spencer Lane",
+      "Ashton Mason","James Smith"
     ];
-
     let dragged = null;
 
     function initEmployees() {
@@ -194,117 +269,91 @@
     }
 
     function toggleEmployees() {
-      const dropdown = document.getElementById('employeeDropdown');
-      if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-      } else {
-        dropdown.style.display = 'block';
-        initEmployees(); // Initialize the employee list when the dropdown is shown
-      }
+      const dd = document.getElementById('employeeDropdown');
+      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+      if (dd.style.display === 'block') initEmployees();
     }
 
     function makeEmployeeBoxDraggable() {
       const box = document.getElementById('employeeDropdown');
-      let isDown = false, offset = [0, 0];
-
-      box.addEventListener('mousedown', function(e) {
+      let isDown = false, offset = [0,0];
+      box.addEventListener('mousedown', e => {
         if (e.target.closest('.employee')) return;
         isDown = true;
-        offset = [
-          box.offsetLeft - e.clientX,
-          box.offsetTop - e.clientY
-        ];
+        offset = [box.offsetLeft - e.clientX, box.offsetTop - e.clientY];
         box.style.cursor = 'grabbing';
-      }, true);
-
-      document.addEventListener('mouseup', function() {
+      });
+      document.addEventListener('mouseup', () => {
         isDown = false;
         box.style.cursor = 'move';
-      }, true);
-
-      document.addEventListener('mousemove', function(event) {
-        event.preventDefault();
-        if (isDown) {
-          box.style.left = (event.clientX + offset[0]) + 'px';
-          box.style.top  = (event.clientY + offset[1]) + 'px';
-        }
-      }, true);
+      });
+      document.addEventListener('mousemove', e => {
+        if (!isDown) return;
+        box.style.left = (e.clientX + offset[0]) + 'px';
+        box.style.top  = (e.clientY + offset[1]) + 'px';
+      });
     }
 
     function enableDragAndDrop() {
       document.addEventListener('dragstart', e => {
-        if (e.target.classList.contains('employee')) {
-          dragged = e.target;
-        }
+        if (e.target.classList.contains('employee')) dragged = e.target;
       });
-
-      document.addEventListener('dragover', e => {
-        e.preventDefault();
-      });
-
+      document.addEventListener('dragover', e => e.preventDefault());
       document.addEventListener('drop', e => {
         e.preventDefault();
-        if (dragged) {
-          const target = e.target.closest('.site-employees');
-          if (target) {
-            target.appendChild(dragged);
-            saveState(); // Save state to localStorage after drop
-          }
-          dragged = null;
+        if (!dragged) return;
+        const target = e.target.closest('.site-employees');
+        if (target) {
+          target.appendChild(dragged);
+          saveState();
         }
+        dragged = null;
       });
     }
 
-    // Function to capture the screenshot and download
-    function downloadScreenshot() {
-      html2canvas(document.body).then(function(canvas) {
+    // Persist layout in localStorage
+    function saveState() {
+      const positions = {};
+      document.querySelectorAll('.site-employees').forEach(zone => {
+        const name = zone.dataset.name;
+        const list = Array.from(zone.querySelectorAll('.employee'))
+                          .map(e => e.textContent);
+        if (list.length) positions[name] = list;
+      });
+      localStorage.setItem('employeePositions', JSON.stringify(positions));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem('employeePositions');
+      if (!saved) return;
+      const positions = JSON.parse(saved);
+      initEmployees();
+      Object.entries(positions).forEach(([zone, names]) => {
+        const el = document.querySelector(`.site-employees[data-name="${zone}"]`);
+        names.forEach(n => {
+          const emp = Array.from(document.querySelectorAll('.employee'))
+                           .find(e => e.textContent === n);
+          if (emp) el.appendChild(emp);
+        });
+      });
+    }
+
+    // Wire‑up screenshot button
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      html2canvas(document.body).then(canvas => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
         link.download = 'schedule_screenshot.png';
         link.click();
       });
-    }
+    });
 
-    // Function to save the state of employees
-    function saveState() {
-      const employeePositions = {};
-      document.querySelectorAll('.site-employees').forEach(site => {
-        const siteName = site.dataset.name;
-        const employeeElements = site.querySelectorAll('.employee');
-        const employeeNames = [];
-        employeeElements.forEach(emp => employeeNames.push(emp.textContent));
-        if (employeeNames.length > 0) {
-          employeePositions[siteName] = employeeNames;
-        }
-      });
-      localStorage.setItem('employeePositions', JSON.stringify(employeePositions));
-    }
-
-    // Function to load the saved state of employees
-    function loadState() {
-      const savedPositions = localStorage.getItem('employeePositions');
-      if (savedPositions) {
-        const employeePositions = JSON.parse(savedPositions);
-        Object.keys(employeePositions).forEach(siteName => {
-          const site = document.querySelector(`.site-employees[data-name="${siteName}"]`);
-          if (site) {
-            employeePositions[siteName].forEach(empName => {
-              const emp = Array.from(document.querySelectorAll('.employee')).find(e => e.textContent === empName);
-              if (emp) {
-                site.appendChild(emp);
-              }
-            });
-          }
-        });
-      }
-    }
-
-    // Initialize the draggable elements and dropdown
-    window.onload = function() {
+    // Initialize on load
+    window.addEventListener('load', () => {
       makeEmployeeBoxDraggable();
       enableDragAndDrop();
-      loadState(); // Load saved state on page load
-    };
+      loadState();
+    });
   </script>
 </body>
 </html>
