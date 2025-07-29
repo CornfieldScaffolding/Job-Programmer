@@ -7,14 +7,12 @@
   <style>
     /* --- BRAND COLORS FROM LOGO --- */
     :root {
-      --primary-color: #60A030;    /* main green */
-      --accent-color: #70B030;     /* slightly lighter */
-      --bg-dark:      #101010;     /* deep backdrop */
-      --text-dark:    #333333;     /* body text */
-      --text-light:   #ffffff;     /* for buttons, headings on dark */
+      --primary-color: #60A030;
+      --accent-color: #70B030;
+      --bg-dark: #101010;
+      --text-dark: #333333;
+      --text-light: #ffffff;
     }
-
-    /* --- BASE STYLING --- */
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -22,8 +20,6 @@
       margin: 0;
       padding: 0;
     }
-
-    /* logo banner */
     .logo {
       background: var(--bg-dark);
       text-align: center;
@@ -33,8 +29,6 @@
       max-width: 300px;
       height: auto;
     }
-
-    /* unified button style */
     button {
       background: var(--primary-color);
       color: var(--text-light);
@@ -47,7 +41,6 @@
     button:hover {
       background: var(--accent-color);
     }
-
     .employee-dropdown {
       display: none;
       position: fixed;
@@ -64,11 +57,8 @@
       width: 300px;
       cursor: move;
     }
-
-    /* layout columns */
     .main-columns {
       display: flex;
-      flex-wrap: nowrap;
       gap: 20px;
       padding: 20px;
       justify-content: center;
@@ -84,8 +74,6 @@
       gap: 10px;
       min-width: 300px;
     }
-
-    /* headings in green */
     .column h2,
     .bottom-box h3 {
       text-align: center;
@@ -93,7 +81,6 @@
       color: var(--primary-color);
       margin: 0 0 10px;
     }
-
     .site-box {
       border: 1px solid var(--accent-color);
       border-radius: 6px;
@@ -109,8 +96,6 @@
       color: var(--accent-color);
       text-align: center;
     }
-
-    /* drop‑zones */
     .site-employees {
       min-height: 60px;
       display: flex;
@@ -121,11 +106,7 @@
       border-radius: 4px;
       background: #fff;
     }
-    .bottom-row {
-      /* override for horizontal wrap */
-      flex-wrap: wrap;
-    }
-
+    .bottom-row { display: flex; flex-wrap: wrap; gap: 5px; }
     .employee {
       padding: 8px;
       background: var(--accent-color);
@@ -134,12 +115,10 @@
       border-radius: 4px;
       cursor: grab;
     }
-
     .drag-over {
       background-color: rgba(96,160,48,0.2);
       border-color: var(--primary-color);
     }
-
     .bottom-section {
       display: flex;
       justify-content: center;
@@ -153,240 +132,80 @@
       width: 45%;
       background: #fff;
     }
-
-    /* auto‑resizing notes field */
+    /* Notes field as contenteditable div */
     .notes {
       width: 100%;
       box-sizing: border-box;
       min-height: 2em;
-      max-height: 10em;
-      overflow: hidden;
-      resize: none;
       margin-top: 5px;
       border: 1px solid var(--primary-color);
       border-radius: 4px;
       padding: 4px;
       font-family: inherit;
       font-size: 14px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      outline: none;
+    }
+    .notes:empty:before {
+      content: attr(data-placeholder);
+      color: #aaa;
     }
   </style>
 </head>
 <body>
   <div class="logo">
-    <img src="CS_logo_long.jpg" alt="Cornfield Scaffolding Logo" />
+    <img src="CS_logo_long.jpg" alt="Logo" />
   </div>
-
-  <div class="employee-toggle" style="text-align:center; margin:20px 0;">
+  <div style="text-align:center; margin:20px 0;">
     <button onclick="toggleEmployees()">Toggle Employee List</button>
   </div>
-
   <div class="employee-dropdown" id="employeeDropdown">
     <div class="site-box" data-type="unassigned">
       <h3>Employees</h3>
       <div class="site-employees" id="employeeList"></div>
-      <textarea class="notes" placeholder="Notes"></textarea>
+      <div class="notes" contenteditable="true" data-placeholder="Notes"></div>
     </div>
   </div>
-
   <div class="main-columns">
     <div class="column">
       <h2>SITES</h2>
-      <div class="site-box">
-        <h3>Ketts Meadow</h3>
-        <div class="site-employees" data-name="Ketts Meadow"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Dovecote Gardens</h3>
-        <div class="site-employees" data-name="Dovecote Gardens"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Elmwell</h3>
-        <div class="site-employees" data-name="Elmwell"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Cygnet Rise</h3>
-        <div class="site-employees" data-name="Cygnet Rise"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Cantley Sugar Factory</h3>
-        <div class="site-employees" data-name="Cantley Sugar Factory"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
+      <div class="site-box"><h3>Ketts Meadow</h3><div class="site-employees" data-name="Ketts Meadow"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Dovecote Gardens</h3><div class="site-employees" data-name="Dovecote Gardens"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Elmwell</h3><div class="site-employees" data-name="Elmwell"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Cygnet Rise</h3><div class="site-employees" data-name="Cygnet Rise"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Cantley Sugar Factory</h3><div class="site-employees" data-name="Cantley Sugar Factory"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
     </div>
-
     <div class="column">
       <h2>GANGS</h2>
-      <div class="site-box">
-        <h3>Gang 1</h3>
-        <div class="site-employees" data-name="Gang 1"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Gang 2</h3>
-        <div class="site-employees" data-name="Gang 2"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Gang 3</h3>
-        <div class="site-employees" data-name="Gang 3"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
+      <div class="site-box"><h3>Gang 1</h3><div class="site-employees" data-name="Gang 1"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Gang 2</h3><div class="site-employees" data-name="Gang 2"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Gang 3</h3><div class="site-employees" data-name="Gang 3"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
     </div>
-
     <div class="column">
       <h2>&nbsp;</h2>
-      <div class="site-box">
-        <h3>Gang 4</h3>
-        <div class="site-employees" data-name="Gang 4"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
-      <div class="site-box">
-        <h3>Gang 5</h3>
-        <div class="site-employees" data-name="Gang 5"></div>
-        <textarea class="notes" placeholder="Notes"></textarea>
-      </div>
+      <div class="site-box"><h3>Gang 4</h3><div class="site-employees" data-name="Gang 4"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+      <div class="site-box"><h3>Gang 5</h3><div class="site-employees" data-name="Gang 5"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
     </div>
   </div>
-
   <div class="bottom-section">
-    <div class="bottom-box">
-      <h3>Holiday</h3>
-      <div class="bottom-row site-employees" data-name="Holiday"></div>
-      <textarea class="notes" placeholder="Notes"></textarea>
-    </div>
-    <div class="bottom-box">
-      <h3>Sick</h3>
-      <div class="bottom-row site-employees" data-name="Sick"></div>
-      <textarea class="notes" placeholder="Notes"></textarea>
-    </div>
+    <div class="bottom-box"><h3>Holiday</h3><div class="bottom-row site-employees" data-name="Holiday"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
+    <div class="bottom-box"><h3>Sick</h3><div class="bottom-row site-employees" data-name="Sick"></div><div class="notes" contenteditable="true" data-placeholder="Notes"></div></div>
   </div>
-
-  <!-- Screenshot Button -->
-  <div style="text-align:center; margin-top: 20px;">
-    <button id="downloadBtn">Screenshot page</button>
-  </div>
-
-  <!-- Scripts -->
+  <div style="text-align:center; margin:20px 0;"><button id="downloadBtn">Screenshot page</button></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
-    const employees = [
-      "Matthew O’donoughoe","Ashley Coleman","Shane Clarke","Luke Watts",
-      "Tyler Didwell","Robert Bone","Tyler Pluck","Tom Piper",
-      "Luke Hughes","Benny Ainge","Reece Hendry","Daniel Fisher",
-      "Elliot Auld","Ashley Dunthorne","Louis Maynard","Bradley Whymark",
-      "Liam Bolt","Riley Bolt","Steve White","Spencer Lane",
-      "Ashton Mason","James Smith"
-    ];
-    let dragged = null;
-
-    function initEmployees() {
-      const container = document.getElementById('employeeList');
-      container.innerHTML = '';
-      employees.forEach(name => {
-        const emp = document.createElement('div');
-        emp.className = 'employee';
-        emp.textContent = name;
-        emp.setAttribute('draggable', true);
-        container.appendChild(emp);
-      });
-    }
-
-    function toggleEmployees() {
-      const dd = document.getElementById('employeeDropdown');
-      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-      if (dd.style.display === 'block') initEmployees();
-    }
-
-    function makeEmployeeBoxDraggable() {
-      const box = document.getElementById('employeeDropdown');
-      let isDown = false, offset = [0,0];
-      box.addEventListener('mousedown', e => {
-        if (e.target.closest('.employee')) return;
-        isDown = true;
-        offset = [box.offsetLeft - e.clientX, box.offsetTop - e.clientY];
-        box.style.cursor = 'grabbing';
-      });
-      document.addEventListener('mouseup', () => {
-        isDown = false;
-        box.style.cursor = 'move';
-      });
-      document.addEventListener('mousemove', e => {
-        if (!isDown) return;
-        box.style.left = (e.clientX + offset[0]) + 'px';
-        box.style.top  = (e.clientY + offset[1]) + 'px';
-      });
-    }
-
-    function enableDragAndDrop() {
-      document.addEventListener('dragstart', e => {
-        if (e.target.classList.contains('employee')) dragged = e.target;
-      });
-      document.addEventListener('dragover', e => e.preventDefault());
-      document.addEventListener('drop', e => {
-        e.preventDefault();
-        if (!dragged) return;
-        const target = e.target.closest('.site-employees');
-        if (target) {
-          target.appendChild(dragged);
-          saveState();
-        }
-        dragged = null;
-      });
-    }
-
-    function saveState() {
-      const positions = {};
-      document.querySelectorAll('.site-employees').forEach(zone => {
-        const name = zone.dataset.name;
-        const list = Array.from(zone.querySelectorAll('.employee'))
-                          .map(e => e.textContent);
-        if (list.length) positions[name] = list;
-      });
-      localStorage.setItem('employeePositions', JSON.stringify(positions));
-    }
-
-    function loadState() {
-      const saved = localStorage.getItem('employeePositions');
-      if (!saved) return;
-      const positions = JSON.parse(saved);
-      initEmployees();
-      Object.entries(positions).forEach(([zone, names]) => {
-        const el = document.querySelector(`.site-employees[data-name="${zone}"]`);
-        names.forEach(n => {
-          const emp = Array.from(document.querySelectorAll('.employee'))
-                           .find(e => e.textContent === n);
-          if (emp) el.appendChild(emp);
-        });
-      });
-    }
-
-    // Screenshot button handler
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      html2canvas(document.body).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'schedule_screenshot.png';
-        link.click();
-      });
-    });
-
-    // Auto-resize notes fields
-    document.addEventListener('input', function(e) {
-      if (e.target.classList.contains('notes')) {
-        e.target.style.height = 'auto';
-        e.target.style.height = e.target.scrollHeight + 'px';
-      }
-    });
-
-    window.addEventListener('load', () => {
-      makeEmployeeBoxDraggable();
-      enableDragAndDrop();
-      loadState();
-    });
+    const employees=["Matthew O’donoughoe","Ashley Coleman","Shane Clarke","Luke Watts","Tyler Didwell","Robert Bone","Tyler Pluck","Tom Piper","Luke Hughes","Benny Ainge","Reece Hendry","Daniel Fisher","Elliot Auld","Ashley Dunthorne","Louis Maynard","Bradley Whymark","Liam Bolt","Riley Bolt","Steve White","Spencer Lane","Ashton Mason","James Smith"];
+    let dragged=null;
+    function initEmployees(){const c=document.getElementById('employeeList');c.innerHTML='';employees.forEach(n=>{const e=document.createElement('div');e.className='employee';e.textContent=n;e.draggable=true;c.appendChild(e);});}
+    function toggleEmployees(){const d=document.getElementById('employeeDropdown');d.style.display=d.style.display==='block'?'none':'block';if(d.style.display==='block')initEmployees();}
+    function makeEmployeeBoxDraggable(){const b=document.getElementById('employeeDropdown');let down=false,off=[0,0];b.addEventListener('mousedown',e=>{if(e.target.closest('.employee'))return;down=true;off=[b.offsetLeft-e.clientX,b.offsetTop-e.clientY];b.style.cursor='grabbing';});document.addEventListener('mouseup',()=>{down=false;b.style.cursor='move';});document.addEventListener('mousemove',e=>{if(!down)return;b.style.left=e.clientX+off[0]+'px';b.style.top=e.clientY+off[1]+'px';});}
+    function enableDragAndDrop(){document.addEventListener('dragstart',e=>{if(e.target.classList.contains('employee'))dragged=e.target;});document.addEventListener('dragover',e=>e.preventDefault());document.addEventListener('drop',e=>{e.preventDefault();if(!dragged)return;const t=e.target.closest('.site-employees');if(t){t.appendChild(dragged);saveState();}dragged=null;});}
+    function saveState(){const p={};document.querySelectorAll('.site-employees').forEach(z=>{const nm=z.dataset.name;const list=Array.from(z.querySelectorAll('.employee')).map(e=>e.textContent);if(list.length)p[nm]=list;});localStorage.setItem('employeePositions',JSON.stringify(p));}
+    function loadState(){const s=localStorage.getItem('employeePositions');if(!s)return;const p=JSON.parse(s);initEmployees();Object.entries(p).forEach(([zone,names])=>{const container=document.querySelector(`.site-employees[data-name="${zone}"]`);names.forEach(n=>{const e=Array.from(document.querySelectorAll('.employee')).find(el=>el.textContent===n);if(e)container.appendChild(e);});});}
+    document.getElementById('downloadBtn').addEventListener('click',()=>{html2canvas(document.body).then(c=>{const link=document.createElement('a');link.href=c.toDataURL('image/png');link.download='schedule_screenshot.png';link.click();});});
+    document.addEventListener('input',e=>{if(e.target.classList.contains('notes')){e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px';}});
+    window.addEventListener('load',()=>{makeEmployeeBoxDraggable();enableDragAndDrop();loadState();});
   </script>
 </body>
 </html>
