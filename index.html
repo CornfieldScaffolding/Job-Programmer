@@ -153,6 +153,22 @@
       width: 45%;
       background: #fff;
     }
+
+    /* auto‑resizing notes field */
+    .notes {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 2em;
+      max-height: 10em;
+      overflow: hidden;
+      resize: none;
+      margin-top: 5px;
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+      padding: 4px;
+      font-family: inherit;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -168,6 +184,7 @@
     <div class="site-box" data-type="unassigned">
       <h3>Employees</h3>
       <div class="site-employees" id="employeeList"></div>
+      <textarea class="notes" placeholder="Notes"></textarea>
     </div>
   </div>
 
@@ -177,23 +194,27 @@
       <div class="site-box">
         <h3>Ketts Meadow</h3>
         <div class="site-employees" data-name="Ketts Meadow"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Dovecote Gardens</h3>
         <div class="site-employees" data-name="Dovecote Gardens"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Elmwell</h3>
         <div class="site-employees" data-name="Elmwell"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Cygnet Rise</h3>
         <div class="site-employees" data-name="Cygnet Rise"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
-      <!-- NEW SITE ADDED -->
       <div class="site-box">
         <h3>Cantley Sugar Factory</h3>
         <div class="site-employees" data-name="Cantley Sugar Factory"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
     </div>
 
@@ -202,14 +223,17 @@
       <div class="site-box">
         <h3>Gang 1</h3>
         <div class="site-employees" data-name="Gang 1"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Gang 2</h3>
         <div class="site-employees" data-name="Gang 2"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Gang 3</h3>
         <div class="site-employees" data-name="Gang 3"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
     </div>
 
@@ -218,10 +242,12 @@
       <div class="site-box">
         <h3>Gang 4</h3>
         <div class="site-employees" data-name="Gang 4"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
       <div class="site-box">
         <h3>Gang 5</h3>
         <div class="site-employees" data-name="Gang 5"></div>
+        <textarea class="notes" placeholder="Notes"></textarea>
       </div>
     </div>
   </div>
@@ -230,22 +256,23 @@
     <div class="bottom-box">
       <h3>Holiday</h3>
       <div class="bottom-row site-employees" data-name="Holiday"></div>
+      <textarea class="notes" placeholder="Notes"></textarea>
     </div>
     <div class="bottom-box">
       <h3>Sick</h3>
       <div class="bottom-row site-employees" data-name="Sick"></div>
+      <textarea class="notes" placeholder="Notes"></textarea>
     </div>
   </div>
 
-  <!-- Updated Screenshot Button -->
+  <!-- Screenshot Button -->
   <div style="text-align:center; margin-top: 20px;">
     <button id="downloadBtn">Screenshot page</button>
   </div>
 
-  <!-- Load html2canvas then wire‑up our click handler -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
-    // Employee data and drag/drop logic
     const employees = [
       "Matthew O’donoughoe","Ashley Coleman","Shane Clarke","Luke Watts",
       "Tyler Didwell","Robert Bone","Tyler Pluck","Tom Piper",
@@ -311,7 +338,6 @@
       });
     }
 
-    // Persist layout in localStorage
     function saveState() {
       const positions = {};
       document.querySelectorAll('.site-employees').forEach(zone => {
@@ -338,7 +364,7 @@
       });
     }
 
-    // Wire‑up screenshot button
+    // Screenshot button handler
     document.getElementById('downloadBtn').addEventListener('click', () => {
       html2canvas(document.body).then(canvas => {
         const link = document.createElement('a');
@@ -348,7 +374,14 @@
       });
     });
 
-    // Initialize on load
+    // Auto-resize notes fields
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('notes')) {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
+      }
+    });
+
     window.addEventListener('load', () => {
       makeEmployeeBoxDraggable();
       enableDragAndDrop();
