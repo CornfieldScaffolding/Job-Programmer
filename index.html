@@ -195,7 +195,7 @@
   <div style="text-align:center; margin:20px 0;"><button id="downloadBtn">Screenshot page</button></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
-    const employees=["Matthew O’donoughoe","Ashley Coleman","Shane Clarke","Luke Watts","Tyler Didwell","Robert Bone","Tyler Pluck","Tom Piper","Luke Hughes","Benny Ainge","Reece Hendry","Daniel Fisher","Elliot Auld","Ashley Dunthorne","Louis Maynard","Bradley Whymark","Liam Bolt","Riley Bolt","Steve White","Spencer Lane","Ashton Mason","James Smith"];
+    const employees=["Alex Worsley","Ashley Coleman","Ashley Dunthorne","Ashton Mason","Benny Ainge","Bradley Whymark","Daniel Fisher","Elliot Auld","James Smith","Joe Staff","John Goosetree","Kieran Bulman","Liam Bolt","Louis Maynard","Luke Hughes","Luke Watts","Matthew O’donoughoe","Reece Hendry","Reece Hendry","Riley Bolt","Robert Bone","Shane Clarke","Spencer Lane","Steve White","Tom Piper","Tyler Didwell","Tyler Pluck"];
     let dragged=null;
     function initEmployees(){const c=document.getElementById('employeeList');c.innerHTML='';employees.forEach(n=>{const e=document.createElement('div');e.className='employee';e.textContent=n;e.draggable=true;c.appendChild(e);});}
     function toggleEmployees(){const d=document.getElementById('employeeDropdown');d.style.display=d.style.display==='block'?'none':'block';if(d.style.display==='block')initEmployees();}
